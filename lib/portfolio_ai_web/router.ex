@@ -21,9 +21,11 @@ defmodule PortfolioAiWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", PortfolioAiWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", PortfolioAiWeb.Api, as: :api do
+    pipe_through :api
+
+    post "/chat", ChatController, :index
+  end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:portfolio_ai, :dev_routes) do
