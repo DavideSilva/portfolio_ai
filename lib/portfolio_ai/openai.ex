@@ -27,17 +27,6 @@ defmodule PortfolioAi.Openai do
     response["choices"] |> Enum.at(0) |> Map.get("message") |> Map.get("content")
   end
 
-  def continue_chat_with_tools(messages, model \\ @model) do
-    prompt =
-      Chat.Completions.new(
-        model: model,
-        messages: messages |> Enum.reverse()
-      )
-
-    {:ok, response} = get_client() |> Chat.Completions.create(prompt)
-    response["choices"] |> Enum.at(0) |> Map.get("message") |> Map.get("content")
-  end
-
   def chat_with_tools(messages, model \\ @model) do
     msgs = [ChatMessage.user(messages)]
 
@@ -61,6 +50,17 @@ defmodule PortfolioAi.Openai do
 
     latest_msgs = [tool_results | [fn_message | messages]] |> List.flatten()
     continue_chat_with_tools(latest_msgs)
+  end
+
+  def continue_chat_with_tools(messages, model \\ @model) do
+    prompt =
+      Chat.Completions.new(
+        model: model,
+        messages: messages |> Enum.reverse()
+      )
+
+    {:ok, response} = get_client() |> Chat.Completions.create(prompt)
+    response["choices"] |> Enum.at(0) |> Map.get("message") |> Map.get("content")
   end
 
   defp call_tool(tool_call) do

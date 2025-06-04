@@ -24,7 +24,8 @@ defmodule PortfolioAiWeb.Router do
   scope "/api", PortfolioAiWeb.Api, as: :api do
     pipe_through :api
 
-    post "/chat", ChatController, :index
+    post "/chat", ChatController, :chat
+    post "/chat_tools", ChatController, :chat_tools
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
